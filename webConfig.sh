@@ -15,7 +15,7 @@ hostnamectl set-hostname www
 # Créer l'utilisateur admin et définir le mot de passe
 echo "Création de l'utilisateur admin et configuration du mot de passe"
 useradd -m -s /bin/bash admin
-echo "admin:esma" | chpasswd
+echo "admin:vitrygtr" | chpasswd
 usermod -aG sudo admin
 
 # Créer les répertoires nécessaires
@@ -28,8 +28,7 @@ echo "Création des fichiers index.html et perdu.html"
 bash -c 'echo "<h1>Bienvenue sur notre site !</h1>" > /var/www/html/index.html'
 bash -c 'echo "<h1>Traduction de Perdu.com</h1>" > /var/www/html/perdu.html'
 
-# Copier l'image de votre choix dans le répertoire images
-echo "Copier l'image de votre choix dans le répertoire images (à faire manuellement)"
+cp image.jpg /var/www/html/images/
 
 # Configurer la protection par mot de passe du répertoire private
 echo "Configuration de la protection par mot de passe du répertoire private"
@@ -44,6 +43,8 @@ echo "Configuration de la page d'erreur personnalisée"
 bash -c 'echo "ErrorDocument 404 /erreur.html" > /etc/apache2/conf-available/custom-errors.conf'
 bash -c 'echo "<h1>Désolé cette page nexiste pas !</h1>" > /var/www/html/erreur.html'
 a2enconf custom-errors
+
+
 
 # Redémarrer Apache pour prendre en compte les modifications
 echo "Redémarrage d'Apache"
