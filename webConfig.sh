@@ -1,28 +1,52 @@
 #!/bin/bash
 
-apt-get update
-apt-get install -y apache2
+# Mettre à jour les paquets
+echo "Mise à jour des paquets"
+sudo apt-get update
 
+# Installer Apache
+echo "Installation d'Apache"
+sudo apt-get install apache2 -y
 
-mkdir -p /var/www/html/images
-echo "ma page" |   tee /var/www/html/index.html
-echo "<h1>Lost on internet ?</h1><br><h3>Don't panic we're going to help you</h3><br><br><h5>* <----- yu're here</h5>" |   tee /var/www/html/perdu.html
-# Copiez une image de votre choix dans le répertoire /var/www/html/images/
+# Configurer le nom de la machine
+echo "Configuration du nom de la machine"
+sudo hostnamectl set-hostname www
 
-# Créer un répertoire privé et protégé par mot de passe
-mkdir /var/www/html/private
-touch /var/www/html/private/.htaccess
-apt-get install -y apache2-utils
-htpasswd -c /var/www/html/private/.htpasswd username esma
-# Entrez le mot de passe pour "username"
-bash -c "cat << EOT > /var/www/html/private/.htaccess
-AuthType Basic
-AuthName \"Restricted Access\"
-AuthUserFile /var/www/html/private/.htpasswd
-Require valid-user
-EOT"
+# Créer l'utilisateur admin et définir le mot de passe
+echo "Création de l'utilisateur admin et configuration du mot de passe"
+sudo useradd -m -s /bin/bash admin
+echo "admin:vitrygtr" | sudo chpasswd
+sudo usermod -aG sudo admin
 
-echo "Désolé cette page n'existe pas ! Page d'erreur perso" |   tee /var/www/html/404.html
-sed -i 's|</VirtualHost>|    ErrorDocument 404 /404.html\n</VirtualHost>|' /etc/apache2/sites-available/000-default.conf
+# Créer les répertoires nécessaires
+echo "Création des répertoires nécessaires"
+sudo mkdir -p /var/www/html/images
+sudo mkdir -p /var/www/html/private
 
-systemctl restart apache2
+# Créer les fichiers index.html et perdu.html
+echo "Création des fichiers index.html et perdu.html"
+sudo bash -c 'echo "<h1>Bienvenue sur notre site !</h1>" > /var/www/html/index.html'
+sudo bash -c 'echo "<h1>Traduction de Perdu.com</h1>" > /var/www/html/perdu.html'
+
+# Copier l'image de votre choix dans le répertoire images
+echo "Copier l'image de votre choix dans le répertoire images (à faire manuellement)"
+
+# Configurer la protection par mot de passe du répertoire private
+echo "Configuration de la protection par mot de passe du répertoire private"
+sudo htpasswd -c /etc/apache2/.htpasswd admin
+sudo bash -c 'echo "AuthType Basic
+AuthName \"Accès restreint\"
+AuthUserFile /etc/apache2/.htpasswd
+Require valid-user" > /var/www/html/private/.htaccess'
+
+# Configurer la page d'erreur personnalisée
+echo "Configuration de la page d'erreur personnalisée"
+sudo bash -c 'echo "ErrorDocument 404 /erreur.html" > /etc/apache2/conf-available/custom-errors.conf'
+sudo bash -c 'echo "<h1>Désolé cette page nexiste pas !</h1>" > /var/www/html/erreur.html'
+sudo a2enconf custom-errors
+
+# Redémarrer Apache pour prendre en compte les modifications
+echo "Redémarrage d'Apache"
+sudo systemctl restart apache2
+
+echo "Le déploiement est terminé."
