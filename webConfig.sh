@@ -14,8 +14,8 @@ hostnamectl set-hostname www
 
 # Créer l'utilisateur admin et définir le mot de passe
 echo "Création de l'utilisateur admin et configuration du mot de passe"
-sudo useradd -m -s /bin/bash admin
-echo "admin:vitrygtr" | sudo chpasswd
+useradd -m -s /bin/bash admin
+echo "admin:esma" | chpasswd
 usermod -aG sudo admin
 
 # Créer les répertoires nécessaires
