@@ -37,13 +37,9 @@ AuthUserFile /etc/apache2/.htpasswd
 Require valid-user" > /var/www/html/private/.htaccess'
 
 echo -e "${GREEN}Autoriser l'utilisation des fichiers .htaccess et activer le module rewrite${RESET}"
-sed -i '/<\/VirtualHost>/i <Directory "/var/www/html/private">\n    AllowOverride All\n<\/Directory>' /etc/apache2/sites-available/000-default.conf
+sed -i '/<\/VirtualHost>/i <Directory "/var/www/html/private">\n    AllowOverride All\n<\/Directory> ErrorDocument 404 /erreur.html' /etc/apache2/sites-available/000-default.conf
 a2enmod rewrite
 
-echo -e "${GREEN}Configuration de la page d'erreur personnalisée${RESET}"
-bash -c 'echo "ErrorDocument 404 /erreur.html" > /etc/apache2/conf-available/custom-errors.conf'
-bash -c 'echo "<h1>Désolé cette page nexiste pas !</h1>" > /var/www/html/erreur.html'
-a2enconf custom-errors
 
 echo -e "${GREEN}Redémarrage d'Apache${RESET}"
 systemctl restart apache2
