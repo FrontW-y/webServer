@@ -1,51 +1,43 @@
 #!/bin/bash
 
-# Couleur vert clair saturé
-PINK="\e[1;35m"
-# Réinitialiser la couleur
-RESET="\e[0m"
-
-echo -e "${PINK}Mise à jour des paquets${RESET}"
+echo "Mise à jour des paquets"
 apt-get update
 
-echo -e "${PINK}Installation d'Apache${RESET}"
+echo "Installation d'Apache"
 apt-get install apache2 -y
 
-echo -e "${PINK}Configuration du nom de la machine${RESET}"
+echo "Configuration du nom de la machine"
 hostnamectl set-hostname www
 
-echo -e "${PINK}Création de l'utilisateur admin et configuration du mot de passe${RESET}"
+echo "Création de l'utilisateur admin et configuration du mot de passe"
 useradd -m -s /bin/bash admin
 echo "admin:vitrygtr" | chpasswd
 usermod -aG sudo admin
 
-echo -e "${PINK}Création des répertoires nécessaires${RESET}"
+echo "Création des répertoires nécessaires"
 mkdir -p /var/www/html/images
 mkdir -p /var/www/html/private
 
-echo -e "${PINK}Création des fichiers index.html et perdu.html${RESET}"
+echo "Création des fichiers index.html, perdu.html et erreur.html"
 bash -c 'echo "<h1>Bienvenue sur notre site !</h1>" > /var/www/html/index.html'
 bash -c 'echo "Vous êtes perdu sur internet ?" > /var/www/html/perdu.html'
 bash -c 'echo "<h1>Cette page est une page derreur personalisé</h1> > /var/www/html/erreur.html'
 
-
 cp image.jpg /var/www/html/images/
 
-echo -e "${PINK}Configuration de la protection par mot de passe du répertoire private${RESET}"
+echo "Configuration de la protection par mot de passe du répertoire private"
 htpasswd -c /etc/apache2/.htpasswd admin
 bash -c 'echo "AuthType Basic
-AuthName \"Accès restreint\"
+AuthName "Accès restreint"
 AuthUserFile /etc/apache2/.htpasswd
 Require valid-user" > /var/www/html/private/.htaccess'
 
-echo -e "${PINK}Autoriser l'utilisation des fichiers .htaccess et activer le module rewrite${RESET}"
-sed -i '/<\/VirtualHost>/i <Directory "/var/www/html/private">\n    AllowOverride All\n<\/Directory> ErrorDocument 404 /erreur.html' /etc/apache2/sites-available/000-default.conf
+echo "Autoriser l'utilisation des fichiers .htaccess"
+sed -i '/</VirtualHost>/i <Directory "/var/www/html/private">\n AllowOverride All\n</Directory> ErrorDocument 404 /erreur.html' /etc/apache2/sites-available/000-default.conf
 
-
-
-echo -e "${PINK}Redémarrage d'Apache${RESET}"
+echo "Redémarrage d'Apache"
 systemctl restart apache2
 
-echo -e "${PINK}Le déploiement est terminé.${RESET}"
+echo "Le déploiement est terminé."
 
 systemctl status apache2
