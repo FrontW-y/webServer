@@ -3,9 +3,6 @@
 echo "Mise à jour des paquets"
 apt-get update
 
-echo "Installation du paquet passwd"
-apt-get install passwd -y
-
 echo "Installation d'Apache"
 apt-get install apache2 -y
 
@@ -14,9 +11,7 @@ hostnamectl set-hostname www
 
 echo "Création de l'utilisateur admin et configuration du mot de passe"
 useradd -m -s /bin/bash admin
-echo "admin:vitrygtr" > temp_password_file.txt
-cat temp_password_file.txt | sudo passwd --stdin admin
-rm temp_password_file.txt
+echo "admin:vitrygtr" | chpasswd
 usermod -aG sudo admin
 
 echo "Création des répertoires nécessaires"
@@ -32,11 +27,14 @@ cp /root/webServer/image.jpg /var/www/html/images/
 
 echo "Configuration de la protection par mot de passe du répertoire private"
 htpasswd -c /etc/apache2/.htpasswd admin
-bash -c 'echo "AuthType Basic\nAuthName \"Accès restreint\"\nAuthUserFile /etc/apache2/.htpasswd\nRequire valid-user" > /var/www/html/private/.htaccess'
-
+bash -c 'echo "AuthType Basic
+AuthName "Accès restreint"
+AuthUserFile /etc/apache2/.htpasswd
+Require valid-user" > /var/www/html/private/.htaccess'
 
 echo "Configuration des differentes pages du site"
 sed -i '/<\/VirtualHost>/i <Directory "/var/www/html/private">\n AllowOverride All\n<\/Directory>\nErrorDocument 404 /erreur.html' /etc/apache2/sites-available/000-default.conf
+
 
 echo "Redémarrage d'Apache"
 systemctl restart apache2
