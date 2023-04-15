@@ -21,7 +21,7 @@ mkdir -p /var/www/html/private
 echo "Création des fichiers index.html, perdu.html et erreur.html"
 bash -c 'echo "<h1>Bienvenue sur notre site !</h1>" > /var/www/html/index.html'
 bash -c 'echo "Vous êtes perdu sur internet ?" > /var/www/html/perdu.html'
-bash -c 'echo "<h1>Cette page est une page derreur personalisé</h1> > /var/www/html/erreur.html'
+bash -c 'echo "<h1>Cette page est une page derreur personalisé</h1>" > /var/www/html/erreur.html'
 
 cp image.jpg /var/www/html/images/
 
@@ -32,8 +32,9 @@ AuthName "Accès restreint"
 AuthUserFile /etc/apache2/.htpasswd
 Require valid-user" > /var/www/html/private/.htaccess'
 
-echo "Autoriser l'utilisation des fichiers .htaccess"
-sed -i '/</VirtualHost>/i <Directory "/var/www/html/private">\n AllowOverride All\n</Directory> ErrorDocument 404 /erreur.html' /etc/apache2/sites-available/000-default.conf
+echo "Configuration des differentes pages du site"
+sed -i '/<\/VirtualHost>/i <Directory "/var/www/html/private">\n AllowOverride All\n<\/Directory>\nErrorDocument 404 /erreur.html' /etc/apache2/sites-available/000-default.conf
+
 
 echo "Redémarrage d'Apache"
 systemctl restart apache2
