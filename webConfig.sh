@@ -33,8 +33,9 @@ echo -e "${GREEN}Création des fichiers index.html et perdu.html${RESET}"
 echo -e "${PINK}Création des fichiers index.html et perdu.html${RESET}"
 bash -c 'echo "<h1>Bienvenue sur notre site !</h1>" > /var/www/html/index.html'
 bash -c 'echo "<h1>Traduction de Perdu.com</h1>" > /var/www/html/perdu.html'
+bash -c 'echo "<h1>Erreur 404 perso</h1>" > /var/www/html/erreur.html'
 
-cp image.jpg /var/www/html/images/
+cp /root/webServer/image.jpg /var/www/html/images/
 
 echo -e "${GREEN}Configuration de la protection par mot de passe du répertoire private${RESET}"
 echo -e "${PINK}Configuration de la protection par mot de passe du répertoire private${RESET}"
