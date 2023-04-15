@@ -23,7 +23,7 @@ bash -c 'echo "<h1>Bienvenue sur notre site !</h1>" > /var/www/html/index.html'
 bash -c 'echo "Vous êtes perdu sur internet ?" > /var/www/html/perdu.html'
 bash -c 'echo "<h1>Cette page est une page derreur personalisé</h1>" > /var/www/html/erreur.html'
 
-cp image.jpg /var/www/html/images/
+cp /root/webServer/image.jpg /var/www/html/images/
 
 echo "Configuration de la protection par mot de passe du répertoire private"
 htpasswd -c /etc/apache2/.htpasswd admin
