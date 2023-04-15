@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 echo -e "Mise à jour des paquets"
 apt-get update
 
@@ -11,7 +10,7 @@ echo -e "Configuration du nom de la machine"
 hostnamectl set-hostname www
 
 echo -e "Création de l'utilisateur admin et configuration du mot de passe"
-useradd -m -s /bin/bash admin
+adduser --gecos "" --disabled-password --shell /bin/bash admin
 echo "admin:vitrygtr" | chpasswd
 usermod -aG sudo admin
 
