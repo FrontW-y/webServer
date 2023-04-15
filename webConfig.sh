@@ -25,8 +25,8 @@ mkdir -p /var/www/html/private
 
 echo -e "${PINK}Création des fichiers index.html et perdu.html${RESET}"
 bash -c 'echo "<h1>Bienvenue sur notre site !</h1>" > /var/www/html/index.html'
-bash -c 'echo "<html><head><title>Vous Etes Perdu ?</title></head><body><h1>Perdu sur l\'Internet ?</h1><h2>Pas de panique, on va vous aider</h2> <strong><pre> * <----- vous êtes ici</pre></strong" > /var/www/html/perdu.html'
-bash -c 'echo "<h1>Cette page est une page d\'erreur personalisé</h1> groupe d\'Esma" > /var/www/html/erreur.html'
+bash -c 'echo "Vous êtes perdu sur internet ?" > /var/www/html/perdu.html'
+bash -c 'echo "<h1>Cette page est une page derreur personalisé</h1> > /var/www/html/erreur.html'
 
 
 cp image.jpg /var/www/html/images/
